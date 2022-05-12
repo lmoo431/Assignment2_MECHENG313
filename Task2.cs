@@ -3,27 +3,27 @@
     class Task2
     {
 
-        public static void actionW()
+        private static void actionW()
         {
             Console.WriteLine("Action W");
         }
 
-        public static void actionX()
+        private static void actionX()
         {
             Console.WriteLine("Action X");
         }
 
-        public static void actionY()
+        private static void actionY()
         {
             Console.WriteLine("Action Y");
         }
 
-        public static void actionZ()
+        private static void actionZ()
         {
             Console.WriteLine("Action Z");
         }
 
-        public static void quit()
+        private static void quit()
         {   
             Console.WriteLine("Please enter the log save file directory and name (e.g. c:\\temp\\log1.txt");
             string dir_input = Console.ReadLine();
