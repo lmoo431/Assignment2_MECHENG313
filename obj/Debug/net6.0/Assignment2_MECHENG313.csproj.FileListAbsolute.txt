@@ -1,0 +1,15 @@
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\bin\Debug\net6.0\Assignment2_MECHENG313.exe
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\bin\Debug\net6.0\Assignment2_MECHENG313.deps.json
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\bin\Debug\net6.0\Assignment2_MECHENG313.runtimeconfig.json
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\bin\Debug\net6.0\Assignment2_MECHENG313.dll
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\bin\Debug\net6.0\Assignment2_MECHENG313.pdb
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\obj\Debug\net6.0\Assignment2_MECHENG313.csproj.AssemblyReference.cache
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\obj\Debug\net6.0\Assignment2_MECHENG313.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\obj\Debug\net6.0\Assignment2_MECHENG313.AssemblyInfoInputs.cache
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\obj\Debug\net6.0\Assignment2_MECHENG313.AssemblyInfo.cs
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\obj\Debug\net6.0\Assignment2_MECHENG313.csproj.CoreCompileInputs.cache
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\obj\Debug\net6.0\Assignment2_MECHENG313.dll
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\obj\Debug\net6.0\refint\Assignment2_MECHENG313.dll
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\obj\Debug\net6.0\Assignment2_MECHENG313.pdb
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\obj\Debug\net6.0\Assignment2_MECHENG313.genruntimeconfig.cache
+C:\Users\leomo\source\repos\Assignment2_MECHENG313\Assignment2_MECHENG313\obj\Debug\net6.0\ref\Assignment2_MECHENG313.dll
