@@ -63,10 +63,11 @@
             Console.WriteLine("State: {0}", state);
             while (true)
             {
-                string event_input = Console.ReadLine();
-                if (event_input.Length == 1 && event_to_num.ContainsKey(event_input[0]))
+                ConsoleKeyInfo cki;
+                cki = Console.ReadKey(true);
+                if (event_to_num.ContainsKey(cki.KeyChar))
                 {
-                    int event_num = event_to_num[event_input[0]];
+                    int event_num = event_to_num[cki.KeyChar];
                     Action[] actions = fst.GetActions(state, event_num);
                     for (int i = 0; i < actions.Length; i++){actions[i]();}
                     if (state != fst.GetNextState(state, event_num))
