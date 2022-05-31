@@ -37,9 +37,8 @@
             event_to_num['a'] = 0;
             event_to_num['b'] = 1;
             event_to_num['c'] = 2;
-            event_to_num['q'] = 3;
 
-            var fst = new FiniteStateTable(3, 4);
+            var fst = new FiniteStateTable(3, 3);
             fst.SetNextState(0, 0, 1);
             fst.SetActions(0, 0, new Action[] { actionX, actionY });
 
@@ -55,19 +54,18 @@
             fst.SetNextState(2, 0, 0);
             fst.SetActions(2, 0, new Action[] { actionW });
 
-            fst.SetActions(0, 3, new Action[] { quit });
-            fst.SetActions(1, 3, new Action[] { quit });
-            fst.SetActions(2, 3, new Action[] { quit });
-
             int state = 0;
             Console.WriteLine("State: {0}", state);
             while (true)
             {
-                ConsoleKeyInfo cki;
-                cki = Console.ReadKey(true);
-                if (event_to_num.ContainsKey(cki.KeyChar))
+                ConsoleKeyInfo cki = Console.ReadKey(true);
+                char key_input = Char.ToLower(cki.KeyChar);
+                if (key_input == 'q') {
+                    quit();
+                }
+                else if (event_to_num.ContainsKey(key_input))
                 {
-                    int event_num = event_to_num[cki.KeyChar];
+                    int event_num = event_to_num[key_input];
                     Action[] actions = fst.GetActions(state, event_num);
                     for (int i = 0; i < actions.Length; i++){actions[i]();}
                     if (state != fst.GetNextState(state, event_num))
