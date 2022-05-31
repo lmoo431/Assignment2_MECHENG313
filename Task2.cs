@@ -79,7 +79,7 @@
             event_to_num['b'] = 1;
             event_to_num['c'] = 2;
 
-            var fst = new FiniteStateTable(3, 3);
+            var fst = new FiniteStateTable(3, 3, 0);
             fst.SetNextState(0, 0, 1);
             fst.SetActions(0, 0, new Action[] { actionX, actionY });
 
@@ -95,31 +95,34 @@
             fst.SetNextState(2, 0, 0);
             fst.SetActions(2, 0, new Action[] { actionW });
 
-            int state = 0;
-            Console.WriteLine("State: {0}", state);
-            add_to_log(ref console_log, String.Format("State: {0}", state), false);
+            Console.WriteLine("State: {0}", fst.currentState);
+            add_to_log(ref console_log, String.Format("State: {0}", fst.currentState), false);
 
             while (true)
             {
                 ConsoleKeyInfo cki = Console.ReadKey(true);
                 char key_input = Char.ToLower(cki.KeyChar);
-                add_to_log(ref console_log, Char.ToString(key_input), true);
+                add_to_log(ref console_log, "User input: " + Char.ToString(key_input), true);
                 if (key_input == 'q') {
                     quit();
                 }
                 else if (event_to_num.ContainsKey(key_input))
                 {
                     int event_num = event_to_num[key_input];
-                    Action[] actions = fst.GetActions(state, event_num);
+                    Action[] actions = fst.GetActions(fst.currentState, event_num);
                     for (int i = 0; i < actions.Length; i++){actions[i]();}
-                    if (state != fst.GetNextState(state, event_num))
+                    if (fst.currentState != fst.GetNextState(fst.currentState, event_num))
                     {
-                        state = fst.GetNextState(state, event_num);
-                        Console.WriteLine("State: {0}", state);
-                        add_to_log(ref console_log, String.Format("State: {0}", state), false);
+                        fst.currentState = fst.GetNextState(fst.currentState, event_num);
+                        Console.WriteLine("State: {0}", fst.currentState);
+                        add_to_log(ref console_log, String.Format("Now in State {0}", fst.currentState), false);
                     }
                 }
             }
         }
     }
 }
+
+/* 
+    Note: output log is a bit weird in places skipping over to next line
+*/
