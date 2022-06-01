@@ -1,86 +1,62 @@
-using System.Threading;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Assignment2_MECHENG313
 {
-    
+
     class Task3
     {
 
         static string console_log = "";
-        
-        // Make some boolean variables that we can use to monitor when actions J, K and L need to be executed using multithreading
-        static bool jIsTriggered = false;
-        static bool kIsTriggered = false;
-        static bool lIsTriggered = false;
+
+        private static object lock_log = new object();
 
         private static void add_to_log(ref string log, string line, bool timestamp)
         {
-            if (timestamp)
+            lock (lock_log)
             {
-                log += String.Format("{0} @ Time: {1}\n", line, DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss:ffff"));
-            }
-            else
-            {
-                log += String.Format("{0}\n", line);
+                if (timestamp)
+                {
+                    log += String.Format("{0} @ Time: {1}\n", line, DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss:ffff"));
+                }
+                else
+                {
+                    log += String.Format("{0}\n", line);
+                }
             }
         }
 
         private static void actionJ()
         {
             // This method will run on a separate thread until the program ends
-            while (true)
-            {
-                if (jIsTriggered)
-                {
+
+                
                     Console.WriteLine("Action J");
                     add_to_log(ref console_log, "Action J", true);
-                    jIsTriggered = false;
-                }
-            }
-            
+                 
+
         }
 
         private static void actionK()
         {
             // This method will run on a separate thread until the program ends
-            while (true)
-            {
-                if (kIsTriggered)
-                {
+            
                     Console.WriteLine("Action K");
                     add_to_log(ref console_log, "Action K", true);
-                    kIsTriggered = false;
-                }
-            }
+                   
+              
         }
 
         private static void actionL()
         {
             // This method will run on a separate thread until the program ends
-            while (true)
-            {
-                if (lIsTriggered)
-                {
+           
                     Console.WriteLine("Action L");
                     add_to_log(ref console_log, "Action L", true);
-                    lIsTriggered = false;
-                }
-            }
-        }
-
-        private static void triggerJ()
-        {
-            jIsTriggered = true;
-        }
-
-        private static void triggerK()
-        {
-            kIsTriggered = true;
-        }
-
-        private static void triggerL()
-        {
-            lIsTriggered = true;
+                    
+           
         }
 
         private static void actionW()
@@ -144,13 +120,12 @@ namespace Assignment2_MECHENG313
         {
             // Set up a dictionary to map user actions to numbers for ease of implementation later on
             Dictionary<char, int> event_to_num = new Dictionary<char, int>();
-            Dictionary<char, int> event_to_num = new Dictionary<char, int>();
             event_to_num['a'] = 0;
             event_to_num['b'] = 1;
             event_to_num['c'] = 2;
 
             // Create and populate the finite state table from Task 2
-            var fstA = new FiniteStateTable(3, 3, 0);
+            var fstA = new FiniteStateTable(3, 3, 1);
             fstA.SetNextState(0, 0, 1);
             fstA.SetActions(0, 0, new Action[] { actionX, actionY });
 
@@ -177,27 +152,21 @@ namespace Assignment2_MECHENG313
             fstB.SetNextState(1, 2, 0);
 
             // Set up actions to be dependent on fstA being in state 1
-            fstB.SetActions(1, 0, new Action[] { triggerJ, triggerK, triggerL }, fstA, 1);
-            fstB.SetActions(1, 1, new Action[] { triggerJ, triggerK, triggerL }, fstA, 1);
-            fstB.SetActions(1, 2, new Action[] { triggerJ, triggerK, triggerL }, fstA, 1);
-            
+            fstB.SetActions(1, 0, new Action[] { actionJ, actionK, actionL }, fstA, 1);
+            fstB.SetActions(1, 1, new Action[] { actionJ, actionK, actionL }, fstA, 1);
+            fstB.SetActions(1, 2, new Action[] { actionJ, actionK, actionL }, fstA, 1);
+
             // Create three separate threads to carry out actions J, K and L and start them. This will begin an
             // infinite loop that constantly checks if these actions have been triggered to occur, and triggers
             // them when that is the case. 
-            var thrJ = new Thread(actionJ);
-            var thrK = new Thread(actionK);
-            var thrL = new Thread(actionL);
-
-            thrJ.Start();
-            thrK.Start();
-            thrL.Start();
             
+
             // Output initial states to the user
             Console.WriteLine("Starting in State {0}", fstA.currentState);
             Console.WriteLine("Starting in State {0}", (char)(fstB.currentState + 'A'));
             while (true)
             {
-                
+
                 // Constantly read user keyboard input, and if it matches with one of our events (or is 'q' for quit), perform the required action
                 ConsoleKeyInfo cki;
                 cki = Console.ReadKey(true);
@@ -210,15 +179,30 @@ namespace Assignment2_MECHENG313
                 else if (event_to_num.ContainsKey(key_input))
                 {
                     int event_num = event_to_num[char.ToLower(cki.KeyChar)];
-                    
+
                     // Determine what actions need to be taken as a result of input event
                     Action[] actionsA = fstA.GetActions(fstA.currentState, event_num);
                     Action[] actionsB = fstB.GetActions(fstB.currentState, event_num);
-                    
+                    Thread[] threads = new Thread[actionsB.Length];
+
                     // Carry out all required actions
                     for (int i = 0; i < actionsA.Length; i++) { actionsA[i](); }
-                    for (int i = 0; i < actionsB.Length; i++) { actionsB[i](); }
-                    
+                    for (int i = 0; i < actionsB.Length; i++)
+                    {
+
+                        Action a = actionsB[i];
+                        threads[i] = new Thread(() => a());
+
+                    }
+
+                    for (int i = 0; i < actionsB.Length; i++)
+                    {
+                        threads[i].Start();
+                    }
+                    for (int i = 0; i < actionsB.Length; i++) { threads[i].Join(); }
+                
+
+
                     // Prepare to change state - important to not update the actual FST until all FST state changes are resolved, to prevent issues with FST states changing before the next
                     // change is sorted out
                     int newStateA = fstA.currentState;
@@ -230,20 +214,20 @@ namespace Assignment2_MECHENG313
                         newStateA = fstA.GetNextState(fstA.currentState, event_num);
                         Console.WriteLine("Now in State {0}", newStateA);
                     }
-                    
+
                     // Now do the same for the other FST
-                    if(fstB.currentState != fstB.GetNextState(fstB.currentState, event_num))
+                    if (fstB.currentState != fstB.GetNextState(fstB.currentState, event_num))
                     {
                         newStateB = fstB.GetNextState(fstB.currentState, event_num);
                         Console.WriteLine("Now in State {0}", (char)(newStateB + 'A'));
                     }
-                    
+
                     // Only update the current state of both FSTs once all state changes are resolved to prevent errors due to one state changing before another.
                     fstA.currentState = newStateA;
-                    fstB.currentState = newStateB; 
-                    
+                    fstB.currentState = newStateB;
+
                 }
             }
-        }      
+        }
     }
 }
