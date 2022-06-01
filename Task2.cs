@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Assignment2_MECHENG313
 {
@@ -85,7 +84,8 @@ namespace Assignment2_MECHENG313
             Environment.Exit(0); // Exit the environment
         }
         
-        public static void Main(string[] args)
+        
+        public static void RunTask()
         {
             // Stores the key corresponding to different events
             Dictionary<char, int> event_to_num = new Dictionary<char, int>();
@@ -151,4 +151,32 @@ namespace Assignment2_MECHENG313
             }
         }
     }
+
+    class Setup {
+        public static void Main(string[] args) {
+
+            // Entry point into the program
+            String input = "";
+            while (!(input == "2" || input == "3"))
+            {
+                Console.WriteLine("Please enter '2' to run Task 2 or '3' to run Task 3");
+                input = Console.ReadLine();
+                if (input == "2")
+                {
+                    Console.WriteLine("Running Task 2");
+                    Task2.RunTask();
+                }
+                else if (input == "3")
+                {
+                    Console.WriteLine("Running Task 3");
+                    Task3.RunTask();
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Input");
+                }
+            }
+        }
+    }
+
 }

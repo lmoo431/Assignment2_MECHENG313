@@ -1,5 +1,9 @@
+using System;
+
 namespace Assignment2_MECHENG313
 {
+
+    // This class is used to create a finite state table which can be implemented to create a finite state machine
     class FiniteStateTable
     {
         public int currentState; // Current state of the FST

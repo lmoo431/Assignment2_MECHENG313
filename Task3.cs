@@ -113,7 +113,7 @@ namespace Assignment2_MECHENG313
             Environment.Exit(0);
         }
         
-        public static void Main(string[] args)
+        public static void RunTask()
         {
             // Stores the key corresponding to different events
             Dictionary<char, int> event_to_num = new Dictionary<char, int>();
