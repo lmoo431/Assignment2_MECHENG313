@@ -9,12 +9,14 @@ namespace Assignment2_MECHENG313
     class Task3
     {
 
-        static string console_log = "";
+        static string console_log = ""; // Stores the console output and user input
 
         private static object lock_log = new object();
 
+        // Adds to the console log which will later be written to a text file
         private static void add_to_log(ref string log, string line, bool timestamp)
         {
+            // Lock the contents of the add_to_log function so that only one thread can access it at a time
             lock (lock_log)
             {
                 if (timestamp)
@@ -28,35 +30,25 @@ namespace Assignment2_MECHENG313
             }
         }
 
+        // Action J
         private static void actionJ()
         {
-            // This method will run on a separate thread until the program ends
-
-                
-                    Console.WriteLine("Action J");
-                    add_to_log(ref console_log, "Action J", true);
-                 
-
+            Console.WriteLine("Action J");
+            add_to_log(ref console_log, "Action J", true);    
         }
 
+        // Action K
         private static void actionK()
-        {
-            // This method will run on a separate thread until the program ends
-            
-                    Console.WriteLine("Action K");
-                    add_to_log(ref console_log, "Action K", true);
-                   
-              
+        { 
+            Console.WriteLine("Action K");
+            add_to_log(ref console_log, "Action K", true);             
         }
 
+        // Action L
         private static void actionL()
         {
-            // This method will run on a separate thread until the program ends
-           
-                    Console.WriteLine("Action L");
-                    add_to_log(ref console_log, "Action L", true);
-                    
-           
+            Console.WriteLine("Action L");
+            add_to_log(ref console_log, "Action L", true);
         }
 
         private static void actionW()
@@ -65,44 +57,49 @@ namespace Assignment2_MECHENG313
             add_to_log(ref console_log, "Action W", true);
         }
 
+        // Action X
         private static void actionX()
         {
             Console.WriteLine("Action X");
             add_to_log(ref console_log, "Action X", true);
         }
 
+        // Action Y
         private static void actionY()
         {
             Console.WriteLine("Action Y");
             add_to_log(ref console_log, "Action Y", true);
         }
 
+        // Action Z
         private static void actionZ()
         {
             Console.WriteLine("Action Z");
             add_to_log(ref console_log, "Action Z", true);
         }
 
+        // Allows the user to save log file and quit machine
         private static void quit()
         {
             bool saved = false;
             string path = "";
-            while (!saved)
+            while (!saved) // While the file hasn't been saved will keep prompting user to enter a valid dir/name
             {
                 Console.WriteLine("Please enter the log save file directory and name (e.g. c:\\temp\\log1.txt)");
-                path = Console.ReadLine();
+                path = Console.ReadLine(); // Get the user input for the file dir/name
                 try
                 {
-                    if (!path.EndsWith(".txt"))
+                    if (!path.EndsWith(".txt")) // Makes sure file being saved is a text file
                     {
                         Console.WriteLine("Error: Invalid filename, please make sure the filename ends with .txt");
                     }
-                    else if (!Path.IsPathFullyQualified(path))
+                    else if (!Path.IsPathFullyQualified(path)) // Makes sure path is fully qualified
                     {
                         Console.WriteLine("Error: Path is not fully qualified, please ensure path is fully qualified (e.g. c:\\temp\\log1.txt)");
                     }
                     else
                     {
+                        // Try to save the log to the given path, if successful will set saved to true
                         File.WriteAllText(path, console_log);
                         Console.WriteLine("Log has been saved successfully to: {0}", path);
                         saved = true;
@@ -118,87 +115,97 @@ namespace Assignment2_MECHENG313
         
         public static void Main(string[] args)
         {
-            // Set up a dictionary to map user actions to numbers for ease of implementation later on
+            // Stores the key corresponding to different events
             Dictionary<char, int> event_to_num = new Dictionary<char, int>();
             event_to_num['a'] = 0;
             event_to_num['b'] = 1;
             event_to_num['c'] = 2;
 
-            // Create and populate the finite state table from Task 2
-            var fstA = new FiniteStateTable(3, 3, 1);
+            // Create and populate the finite state table from Task 2 
+            var fstA = new FiniteStateTable(3, 3, 0); // Start in state S0
+
+            // State 0 to 1 triggered by event 0
             fstA.SetNextState(0, 0, 1);
             fstA.SetActions(0, 0, new Action[] { actionX, actionY });
 
+            // State 1 to 0 triggered by event 0
             fstA.SetNextState(1, 0, 0);
             fstA.SetActions(1, 0, new Action[] { actionW });
 
+            // State 1 to 2 triggered by event 1
             fstA.SetNextState(1, 1, 2);
             fstA.SetActions(1, 1, new Action[] { actionX, actionZ });
 
+            // State 2 to 1 triggered by event 2
             fstA.SetNextState(2, 2, 1);
             fstA.SetActions(2, 2, new Action[] { actionX, actionY });
 
+            // State 2 to 0 triggered by event 0
             fstA.SetNextState(2, 0, 0);
             fstA.SetActions(2, 0, new Action[] { actionW });
 
             // Create and populate the new finite state table for Task 3
-            var fstB = new FiniteStateTable(2, 3, 1);
+            var fstB = new FiniteStateTable(2, 3, 1); // Start in state SB
 
+            // State 0 to 1 triggered by event 0
             fstB.SetNextState(0, 0, 1);
 
+            // State 1 to 0 triggered by event 0, 1 or 2
             // The following state changes only happen when we are in state S1 in fstA
             fstB.SetNextState(1, 0, 0);
             fstB.SetNextState(1, 1, 0);
             fstB.SetNextState(1, 2, 0);
 
-            // Set up actions to be dependent on fstA being in state 1
-            fstB.SetActions(1, 0, new Action[] { actionJ, actionK, actionL }, fstA, 1);
-            fstB.SetActions(1, 1, new Action[] { actionJ, actionK, actionL }, fstA, 1);
-            fstB.SetActions(1, 2, new Action[] { actionJ, actionK, actionL }, fstA, 1);
+            // Set up actions for fstB state changes
+            fstB.SetActions(1, 0, new Action[] { actionJ, actionK, actionL });
+            fstB.SetActions(1, 1, new Action[] { actionJ, actionK, actionL });
+            fstB.SetActions(1, 2, new Action[] { actionJ, actionK, actionL });
 
-            // Create three separate threads to carry out actions J, K and L and start them. This will begin an
-            // infinite loop that constantly checks if these actions have been triggered to occur, and triggers
-            // them when that is the case. 
-            
+            // Set up dependencies for fstB (as it is concurrent & dependent on fstA)
+            fstB.SetDependencies(1, 0, fstA, 1);
+            fstB.SetDependencies(1, 1, fstA, 1);
+            fstB.SetDependencies(1, 2, fstA, 1);            
 
-            // Output initial states to the user
+            // Output initial states to the user and logs state
             Console.WriteLine("Starting in State {0}-{1}", fstA.currentState, (char)(fstB.currentState + 'A'));
             add_to_log(ref console_log, String.Format("Starting in State {0}-{1}", fstA.currentState, (char)(fstB.currentState + 'A')), false);
             while (true)
             {
 
-                // Constantly read user keyboard input, and if it matches with one of our events (or is 'q' for quit), perform the required action
+                // Get user input and log it
                 ConsoleKeyInfo cki;
                 cki = Console.ReadKey(true);
                 char key_input = char.ToLower(cki.KeyChar);
                 add_to_log(ref console_log, "User input: " + Char.ToString(key_input), true);
+
+                // Quit if the user pressed the quit key q
                 if (key_input == 'q')
                 {
                     quit();
                 }
+
+                // Check if the key has a corresponding event
                 else if (event_to_num.ContainsKey(key_input))
                 {
                     int event_num = event_to_num[char.ToLower(cki.KeyChar)];
 
                     // Determine what actions need to be taken as a result of input event
-                    Action[] actionsA = fstA.GetActions(fstA.currentState, event_num);
-                    Action[] actionsB = fstB.GetActions(fstB.currentState, event_num);
+                    Action[] actionsA = fstA.GetActions(event_num);
+                    Action[] actionsB = fstB.GetActions(event_num);
                     Thread[] threads = new Thread[actionsB.Length];
 
                     // Carry out all required actions
                     for (int i = 0; i < actionsA.Length; i++) { actionsA[i](); }
                     for (int i = 0; i < actionsB.Length; i++)
                     {
-
+                        // Add each action for fstB to a new thread to be executed
                         Action a = actionsB[i];
                         threads[i] = new Thread(() => a());
 
                     }
 
-                    for (int i = 0; i < actionsB.Length; i++)
-                    {
-                        threads[i].Start();
-                    }
+                    // Start all threads to run all actions from fstB on different threads, then join them 
+                    for (int i = 0; i < actionsB.Length; i++) { threads[i].Start(); }
                     for (int i = 0; i < actionsB.Length; i++) { threads[i].Join(); }
                 
 
@@ -209,10 +216,12 @@ namespace Assignment2_MECHENG313
                     int newStateB = fstB.currentState;
                     
                     // If the current event is associated with a state change from the current state, change the state and inform the user of the new state through console output
-                    if (fstA.currentState != fstA.GetNextState(fstA.currentState, event_num) || fstB.currentState != fstB.GetNextState(fstB.currentState, event_num))
+                    if (fstA.currentState != fstA.GetNextState(event_num) || fstB.currentState != fstB.GetNextState(event_num))
                     {
-                        newStateA = fstA.GetNextState(fstA.currentState, event_num);
-                        newStateB = fstB.GetNextState(fstB.currentState, event_num);
+                        newStateA = fstA.GetNextState(event_num);
+                        newStateB = fstB.GetNextState(event_num);
+
+                        // Let user know how state has changed, and log this change
                         Console.WriteLine("Now in State {0}-{1}", newStateA, (char)(newStateB + 'A'));
                         add_to_log(ref console_log, String.Format("Now in State {0}-{1}", newStateA, (char)(newStateB + 'A')), false);
                     }
