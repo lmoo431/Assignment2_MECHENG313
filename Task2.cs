@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Assignment2_MECHENG313
-{  
+{
     class Task2
     {
         static string console_log = ""; // Stores the console output and user input
@@ -119,7 +119,7 @@ namespace Assignment2_MECHENG313
             add_to_log(ref console_log, String.Format("Starting in State {0}", fst.currentState), false);
 
             while (true)
-            {   
+            {
                 // Get user input and log it
                 ConsoleKeyInfo cki = Console.ReadKey(true);
                 char key_input = Char.ToLower(cki.KeyChar);
@@ -136,22 +136,19 @@ namespace Assignment2_MECHENG313
                 {
                     int event_num = event_to_num[key_input]; // Get event number
 
-                    // Get an complete actions associated with state and event
-                    Action[] actions = fst.GetActions(fst.currentState, event_num); 
-                    for (int i = 0; i < actions.Length; i++) { actions[i](); } 
+                    // Get and complete actions associated with state and event
+                    Action[] actions = fst.GetActions(event_num);
+                    for (int i = 0; i < actions.Length; i++) { actions[i](); }
 
                     // If the state has changed then update it in the finite state table and log it
-                    if (fst.currentState != fst.GetNextState(fst.currentState, event_num))
+                    if (fst.currentState != fst.GetNextState(event_num))
                     {
-                        fst.currentState = fst.GetNextState(fst.currentState, event_num);
-                        Console.WriteLine("State: {0}", fst.currentState);
+                        fst.currentState = fst.GetNextState(event_num);
+                        Console.WriteLine("Now in State {0}", fst.currentState);
                         add_to_log(ref console_log, String.Format("Now in State {0}", fst.currentState), false);
                     }
                 }
-        
             }
         }
-        
     }
 }
-
