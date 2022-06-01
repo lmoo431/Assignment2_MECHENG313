@@ -1,15 +1,16 @@
-﻿namespace Assignment2_MECHENG313
+namespace Assignment2_MECHENG313
 {
     class Task2
     {
         static string console_log = "";
 
-        private static void add_to_log(ref string log, string line, bool timestamp) {
+        private static void add_to_log(ref string log, string line, bool timestamp)
+        {
             if (timestamp)
             {
                 log += String.Format("{0} @ Time: {1}\n", line, DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss:ffff"));
             }
-            else 
+            else
             {
                 log += String.Format("{0}\n", line);
             }
@@ -40,10 +41,10 @@
         }
 
         private static void quit()
-        {   
+        {
             bool saved = false;
             string path = "";
-            while (!saved) 
+            while (!saved)
             {
                 Console.WriteLine("Please enter the log save file directory and name (e.g. c:\\temp\\log1.txt)");
                 path = Console.ReadLine();
@@ -71,7 +72,7 @@
             }
             Environment.Exit(0);
         }
-
+        
         public static void Main(string[] args)
         {
             Dictionary<char, int> event_to_num = new Dictionary<char, int>();
@@ -95,22 +96,23 @@
             fst.SetNextState(2, 0, 0);
             fst.SetActions(2, 0, new Action[] { actionW });
 
-            Console.WriteLine("State: {0}", fst.currentState);
-            add_to_log(ref console_log, String.Format("State: {0}", fst.currentState), false);
+            Console.WriteLine("Now in State {0}", fst.currentState);
+            add_to_log(ref console_log, String.Format("Now in State {0}", fst.currentState), false);
 
             while (true)
             {
                 ConsoleKeyInfo cki = Console.ReadKey(true);
                 char key_input = Char.ToLower(cki.KeyChar);
                 add_to_log(ref console_log, "User input: " + Char.ToString(key_input), true);
-                if (key_input == 'q') {
+                if (key_input == 'q')
+                {
                     quit();
                 }
                 else if (event_to_num.ContainsKey(key_input))
                 {
                     int event_num = event_to_num[key_input];
                     Action[] actions = fst.GetActions(fst.currentState, event_num);
-                    for (int i = 0; i < actions.Length; i++){actions[i]();}
+                    for (int i = 0; i < actions.Length; i++) { actions[i](); }
                     if (fst.currentState != fst.GetNextState(fst.currentState, event_num))
                     {
                         fst.currentState = fst.GetNextState(fst.currentState, event_num);
@@ -118,11 +120,9 @@
                         add_to_log(ref console_log, String.Format("Now in State {0}", fst.currentState), false);
                     }
                 }
+        
             }
         }
     }
 }
 
-/* 
-    Note: output log is a bit weird in places skipping over to next line
-*/
