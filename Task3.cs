@@ -115,7 +115,7 @@ namespace Assignment2_MECHENG313
             }
             Environment.Exit(0);
         }
-
+        
         public static void Main(string[] args)
         {
             // Set up a dictionary to map user actions to numbers for ease of implementation later on
@@ -162,8 +162,8 @@ namespace Assignment2_MECHENG313
             
 
             // Output initial states to the user
-            Console.WriteLine("Starting in State {0}", fstA.currentState);
-            Console.WriteLine("Starting in State {0}", (char)(fstB.currentState + 'A'));
+            Console.WriteLine("Starting in State {0}-{1}", fstA.currentState, (char)(fstB.currentState + 'A'));
+            add_to_log(ref console_log, String.Format("Starting in State {0}-{1}", fstA.currentState, (char)(fstB.currentState + 'A')), false);
             while (true)
             {
 
@@ -209,17 +209,12 @@ namespace Assignment2_MECHENG313
                     int newStateB = fstB.currentState;
                     
                     // If the current event is associated with a state change from the current state, change the state and inform the user of the new state through console output
-                    if (fstA.currentState != fstA.GetNextState(fstA.currentState, event_num))
+                    if (fstA.currentState != fstA.GetNextState(fstA.currentState, event_num) || fstB.currentState != fstB.GetNextState(fstB.currentState, event_num))
                     {
                         newStateA = fstA.GetNextState(fstA.currentState, event_num);
-                        Console.WriteLine("Now in State {0}", newStateA);
-                    }
-
-                    // Now do the same for the other FST
-                    if (fstB.currentState != fstB.GetNextState(fstB.currentState, event_num))
-                    {
                         newStateB = fstB.GetNextState(fstB.currentState, event_num);
-                        Console.WriteLine("Now in State {0}", (char)(newStateB + 'A'));
+                        Console.WriteLine("Now in State {0}-{1}", newStateA, (char)(newStateB + 'A'));
+                        add_to_log(ref console_log, String.Format("Now in State {0}-{1}", newStateA, (char)(newStateB + 'A')), false);
                     }
 
                     // Only update the current state of both FSTs once all state changes are resolved to prevent errors due to one state changing before another.
@@ -227,6 +222,7 @@ namespace Assignment2_MECHENG313
                     fstB.currentState = newStateB;
 
                 }
+        
             }
         }
     }
