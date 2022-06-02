@@ -128,11 +128,11 @@ namespace Assignment2_MECHENG313
                 // Get user input and log it
                 ConsoleKeyInfo cki = Console.ReadKey(true);
                 char key_input = Char.ToLower(cki.KeyChar);
-                add_to_log(ref console_log, "User input: " + Char.ToString(key_input), true);
 
-                // Quit if the user pressed the quit key q
-                if (key_input == 'q')
-                {
+
+                // Quit if the user pressed the quit key q, add to log with timestamp as it triggered shutdown
+                if (key_input == 'q') { 
+                    add_to_log(ref console_log, "User input: " + Char.ToString(key_input), true);
                     quit();
                 }
 
@@ -141,8 +141,11 @@ namespace Assignment2_MECHENG313
                 {
                     int event_num = event_to_num[key_input]; // Get event number
 
-                    // Get and complete actions associated with state and event
+
+                    // Get and complete actions associated with state and event, timestamp user input if it was a trigger event
                     Action[] actions = fst.GetActions(event_num);
+                    bool timestamp = actions.Length > 0;
+                    add_to_log(ref console_log, "User input: " + Char.ToString(key_input), timestamp);
                     for (int i = 0; i < actions.Length; i++) { actions[i](); }
 
                     // If the state has changed then update it in the finite state table and log it
@@ -152,6 +155,10 @@ namespace Assignment2_MECHENG313
                         Console.WriteLine("Now in State {0}", fst.currentState);
                         add_to_log(ref console_log, String.Format("Now in State {0}", fst.currentState), false);
                     }
+                }
+                else {
+                    // If the key didn't have a corresponding event log but don't timestamp
+                    add_to_log(ref console_log, "User input: " + Char.ToString(key_input), false);
                 }
             }
         }

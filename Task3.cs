@@ -181,11 +181,12 @@ namespace Assignment2_MECHENG313
                 ConsoleKeyInfo cki;
                 cki = Console.ReadKey(true);
                 char key_input = char.ToLower(cki.KeyChar);
-                add_to_log(ref console_log, "User input: " + Char.ToString(key_input), true);
+                
 
-                // Quit if the user pressed the quit key q
+                // Quit if the user pressed the quit key q, add to log with timestamp as triggered shutdown
                 if (key_input == 'q')
                 {
+                    add_to_log(ref console_log, "User input: " + Char.ToString(key_input), true);
                     quit();
                 }
 
@@ -198,6 +199,10 @@ namespace Assignment2_MECHENG313
                     Action[] actionsA = fstA.GetActions(event_num);
                     Action[] actionsB = fstB.GetActions(event_num);
                     Thread[] threads = new Thread[actionsB.Length];
+
+                    // Timestamp if action triggered an event
+                    bool timestamp = actionsA.Length > 0 || actionsB.Length > 0;
+                    add_to_log(ref console_log, "User input: " + Char.ToString(key_input), timestamp);
 
                     // Carry out all required actions
                     for (int i = 0; i < actionsA.Length; i++) { actionsA[i](); }
@@ -236,7 +241,12 @@ namespace Assignment2_MECHENG313
                     fstB.currentState = newStateB;
 
                 }
-        
+                else
+                {
+                    // If the key didn't have a corresponding event log but don't timestamp
+                    add_to_log(ref console_log, "User input: " + Char.ToString(key_input), false);
+                }
+
             }
         }
     }
