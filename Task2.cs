@@ -78,7 +78,7 @@ namespace Assignment2_MECHENG313
                 }
                 catch (DirectoryNotFoundException e) 
                 {
-                    // Offers user to create directory if they enter one that doesn't exist
+                    // Catches error where the directory is valid but doens't exist already
                     Console.WriteLine("Error: This directory doesn't exist");
                 }
                 catch // Catches exception like an invalid directory or file name
