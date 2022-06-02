@@ -17,7 +17,6 @@ namespace Assignment2_MECHENG313
             public FiniteStateTable dependent_FST;
         }
         private cell_FST[,] FST; // 2D FST
-        private static void do_nothing() { } // Default action to take for each state/event combination
 
         // Initialise the FST with a known number of states, events, and starting state
         public FiniteStateTable(int num_states, int num_events, int init_state)
@@ -30,7 +29,7 @@ namespace Assignment2_MECHENG313
                 for (int j = 0; j < num_events; j++)
                 {
                     this.FST[i, j].nextState = i;
-                    this.FST[i, j].actions = new Action[] { do_nothing };
+                    this.FST[i, j].actions = Array.Empty<Action>();
                     this.FST[i, j].dependent_state = -1; // A value of -1 for the dependent state means this cell is not dependent on another FST
                     this.FST[i, j].dependent_FST = null; // A null value for this means there is no dependent FST
                 }
@@ -94,8 +93,8 @@ namespace Assignment2_MECHENG313
                 }
                 else
                 {
-                    // If not then return a blank set of actions, i.e. do nothing
-                    return new Action[] { do_nothing };
+                    // If not then return an empty set of actions, i.e. do nothing
+                    return Array.Empty<Action>();
                 }
             }
             else 
