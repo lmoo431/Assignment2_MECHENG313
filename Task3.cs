@@ -105,14 +105,19 @@ namespace Assignment2_MECHENG313
                         saved = true;
                     }
                 }
-                catch (Exception e)
+                catch (DirectoryNotFoundException e)
                 {
-                    Console.WriteLine("Error saving file, please ensure save directory and path is valid");
+                    // Offers user to create directory if they enter one that doesn't exist
+                    Console.WriteLine("Error: This directory doesn't exist");
+                }
+                catch // Catches exception like an invalid directory or file name
+                {
+                    Console.WriteLine("Error saving file, please ensure save directory and name is valid");
                 }
             }
-            Environment.Exit(0);
+            Environment.Exit(0); // Exit the environment
         }
-        
+
         public static void RunTask()
         {
             // Stores the key corresponding to different events
